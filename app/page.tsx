@@ -1,167 +1,99 @@
 "use client";
 
-import { Play, Lock } from "lucide-react";
-import { SocialProofPopup } from "./components/SocialProofPopup";
-import { ExitPopup } from "./components/ExitPopup";
-import { useState, useEffect } from "react";
+import { useState } from "react"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Copy, Clock } from "lucide-react"
+import { WebinarParams } from "@/components/WebinarParams"
 
-function getNextTimeSlot() {
-  const now = new Date();
-  const minutes = now.getMinutes();
-  const roundedMinutes = Math.ceil(minutes / 15) * 15;
-  const nextSlot = new Date(now);
-  nextSlot.setMinutes(roundedMinutes);
-  nextSlot.setSeconds(0);
-  
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true
-  };
-  
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    weekday: "short",
-    day: "2-digit",
-    month: "2-digit"
-  };
-  
-  const dateStr = nextSlot.toLocaleDateString('pt-BR', dateOptions).replace(',', '');
-  const timeStr = nextSlot.toLocaleTimeString('pt-BR', timeOptions)
-    .replace(':00', ':00')
-    .toUpperCase();
-  
-  const diffMinutes = Math.ceil((nextSlot.getTime() - now.getTime()) / (1000 * 60));
-  
-  return `${dateStr}, ${timeStr} GMT-3 - Em ${diffMinutes} ${diffMinutes === 1 ? 'minuto' : 'minutos'}`;
-}
-
-export default function Home() {
-  const [timeSlot, setTimeSlot] = useState(getNextTimeSlot());
-
-  useEffect(() => {
-    // Atualiza o horário imediatamente
-    setTimeSlot(getNextTimeSlot());
-
-    // Configura o intervalo para atualizar a cada minuto
-    const interval = setInterval(() => {
-      setTimeSlot(getNextTimeSlot());
-    }, 60 * 1000); // 1 minuto em milissegundos
-
-    // Carrega o script do WebinarJam
-    const script = document.createElement('script');
-    script.src = "https://event.webinarjam.com/register/7y2y9c73/embed-form?formButtonText=Sistema%20de%205%20Partes%20Gr%C3%A1tis&formAccentColor=%2329b6f6&formAccentOpacity=0.95&formBgColor=%23ffffff&formBgOpacity=1";
-    script.async = true;
-    document.body.appendChild(script);
-
-    // Limpa o intervalo e remove o script quando o componente é desmontado
-    return () => {
-      clearInterval(interval);
-      document.body.removeChild(script);
-    };
-  }, []);
-
+export default function ConfirmacaoWebinar() {
   return (
-    <main className="min-h-screen bg-[#1E1E1E] text-white">
-      <SocialProofPopup />
-      <ExitPopup />
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
-        <header className="text-center mb-8 pb-8 border-b border-white/10">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">Willian Aksenen®</h1>
-          <div className="text-sm text-gray-400 mb-4">----------------- Acesso Limitado -----------------</div>
-          <h2 className="text-xl md:text-2xl mb-2">Sistema proprietário de 5 partes para Segurança Financeira:</h2>
-          <div className="text-2xl md:text-4xl font-bold mb-8">
-            Aprenda Como Conquistar{" "}
-            <span className="underline decoration-4">MUITO Dinheiro</span> Investindo em Dólar
-          </div>
-        </header>
+    <div className="flex flex-col min-h-screen">
+      {/* Cabeçalho */}
+      <header className="bg-[#0096FF] text-white py-4">
+        <div className="container mx-auto px-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-center">
+            Parabéns! Sua vaga está reservada
+          </h1>
+        </div>
+      </header>
 
-        {/* Main Content Grid */}
-        <div className="grid md:grid-cols-[2fr,1fr] gap-8 mb-12 pb-12 border-b border-white/10">
-          {/* Video Section */}
-          <div className="relative aspect-video bg-black/50 rounded-lg overflow-hidden">
-            <iframe 
-              className="absolute inset-0 w-full h-full"
-              src="https://player-vz-4c3ffc15-b98.tv.pandavideo.com.br/embed/?v=f2f1927d-04b1-4d69-b148-7cede68481e1"
-              title="Video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
+      <main className="flex-1 container mx-auto px-4 py-8">
+        {/* Parâmetros do Webinar */}
+        <WebinarParams />
 
-          {/* Sign Up Form */}
-          <div className="bg-[#2a2a2a] rounded-lg p-4 md:p-6">
-            <div className="text-center mb-6">
-              <div className="mb-4">
-                <img
-                  src="/images/Mockup.png"
-                  alt="O Segredo das Mesas Proprietárias"
-                  className="rounded-lg w-full"
-                />
-              </div>
-              <h3 className="text-lg md:text-xl font-bold mb-4">
-                Comece Agora Mesmo<br />
-                Seu Programa De<br />
-                Treinamento<br />
-                GRATUITO Em 5<br />
-                Partes!
-              </h3>
+        {/* Seção Principal */}
+        <div className="max-w-3xl mx-auto">
+          {/* Imagem e Informações do Apresentador */}
+          <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
+            <div className="w-48 h-48 relative rounded-full overflow-hidden">
+              <Image
+                src="/images/willian-aksenen.png"
+                alt="Willian Aksenen"
+                fill
+                className="object-cover"
+              />
             </div>
+            <div className="text-center md:text-left">
+              <p className="text-gray-600 mb-2">Apresentado por:</p>
+              <h2 className="text-2xl font-bold mb-1">Willian Aksenen</h2>
+              <p className="text-gray-600 mb-2">Trader Profissional & Mentor</p>
+              <div className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                6+ Anos de Experiência
+              </div>
+              <p className="text-gray-600 mt-4 text-sm">
+                Especialista em Forex reconhecido internacionalmente com mais de 15
+                mil alunos de sucesso em todo o mundo.
+              </p>
+            </div>
+          </div>
 
-            <div className="wj-embed-wrapper" data-webinar-hash="7y2y9c73"></div>
+          {/* O que você vai aprender */}
+          <div className="mb-12">
+            <h3 className="text-xl md:text-2xl font-bold text-center mb-6">
+              Aqui está o que você vai aprender durante esta aula gratuita ao vivo:
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>
+                  Como identificar negociações altamente lucrativas que podem gerar
+                  muito dinheiro em menos de 10 minutos por dia
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Como obter lucros insanos e ainda assim estar livre de riscos</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>
+                  Como ganhar e se tornar lucrativo consistentemente mesmo se você
+                  for um novo trader sem conhecimento e ainda assim manter um
+                  estilo de vida
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Botão de Ação */}
+          <div className="text-center">
+            <Button
+              size="lg"
+              className="bg-[#0096FF] hover:bg-[#0084E0] text-white font-bold py-6 px-8 rounded-lg text-xl w-full md:w-auto"
+            >
+              Adicionar ao Calendário
+            </Button>
           </div>
         </div>
+      </main>
 
-        {/* Video Modules Section */}
-        <section className="text-center mb-12 pb-12 border-b border-white/10">
-          <h2 className="text-xl md:text-2xl font-bold mb-6 text-[#0096FF]">Desbloqueie nosso "Sistema de 5 Partes" onde</h2>
-          <p className="text-lg md:text-2xl mb-8 font-bold text-white">
-            Você aprenderá os 3 segredos e a metodologia exata sobre como apenas 1% dos 
-            investidores do mundo realmente conquistam segurança financeira.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
-            {[1, 2, 3, 4, 5].map((index) => (
-              <div key={index} className="relative aspect-video bg-black/50 rounded-lg overflow-hidden group cursor-pointer">
-                <img
-                  src="/images/IMG_1377.JPG"
-                  alt="Imagem de apresentação"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Play className="w-6 h-6 text-white/90" />
-                  </div>
-                  <Lock className="absolute top-2 right-2 w-4 h-4 text-white/50" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Disclaimer */}
-        <section className="text-center mb-12 pb-12 border-b border-white/10">
-          <p className="text-xs md:text-sm text-gray-400">
-            Willian Aksenen é uma empresa de educação financeira que fornece treinamento sobre investimentos em dólar. 
-            Não fazemos alegações ou representações de que ao usar Willian Aksenen você ganhará dinheiro ou garantirá 
-            qualquer ganho financeiro. Memorandos legais e declarações de experiência legal estão disponíveis em nosso site. 
-            O retorno do seu investimento depende de muitos fatores, incluindo sua dedicação, desejo e motivação. 
-            Estamos aqui apenas para ajudá-lo fornecendo educação e treinamento de qualidade.
-          </p>
-        </section>
-
-        {/* Footer */}
-        <footer className="text-center text-xs md:text-sm text-gray-400 pt-4">
-          <p className="space-x-2">
-            Willian Aksenen © 2024. Todos os direitos reservados
-            <a href="#" className="underline hover:text-gray-300">Isenção de responsabilidade</a>
-            <a href="#" className="underline hover:text-gray-300">Termos de uso</a>
-            <a href="#" className="underline hover:text-gray-300">Política de Privacidade</a>
-            <a href="#" className="underline hover:text-gray-300">Política de Cookies</a>
-            <a href="#" className="underline hover:text-gray-300">Contato LGPD</a>
-          </p>
-        </footer>
-      </div>
-    </main>
-  );
+      {/* Rodapé */}
+      <footer className="bg-gray-50 py-4">
+        <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
+          © 2024 Willian Aksenen. Todos os direitos reservados.
+        </div>
+      </footer>
+    </div>
+  )
 }
